@@ -11,6 +11,9 @@ document
   .getElementById("btn-1280")
   .addEventListener("click", () => resizeWindow(1280));
 
+document
+  .getElementById("btn-maximize")
+  .addEventListener("click", maximizeWindow);
 
 function resizeWindow(width) {
   console.log(`Attempting to resize window to ${width}px`);
@@ -24,6 +27,17 @@ function resizeWindow(width) {
       }
     }
   );
+}
+
+function maximizeWindow() {
+  console.log("Attempting to maximize window");
+  chrome.runtime.sendMessage({ action: "maximizeWindow" }, (response) => {
+    if (response.success) {
+      console.log("Window maximized successfully");
+    } else {
+      console.error(`Failed to maximize window: ${response.error}`);
+    }
+  });
 }
 
 console.log("Popup script loaded");

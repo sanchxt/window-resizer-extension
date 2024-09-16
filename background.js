@@ -9,6 +9,24 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     return true;
   }
 
+  if (request.action === "maximizeWindow") {
+    chrome.windows.getCurrent({}, (window) => {
+      chrome.windows.update(window.id, { state: "maximized" }, () => {
+        if (chrome.runtime.lastError) {
+          console.error(
+            `Error maximizing window: ${chrome.runtime.lastError.message}`
+          );
+          sendResponse({
+            success: false,
+            error: chrome.runtime.lastError.message,
+          });
+        } else {
+          sendResponse({ success: true });
+        }
+      });
+    });
+    return true;
+  }
 });
 
 function resizeAndRespond(window, width, sendResponse) {
